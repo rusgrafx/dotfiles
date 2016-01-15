@@ -1,0 +1,100 @@
+# Shell
+alias ll='ls -halF'
+alias la='ls -A'
+alias l='ls -1'
+alias ping='ping -c 10'
+
+alias ip='ifconfig | grep ": active" -B 7 | grep "inet "'
+alias findexe='find . -perm +0111 -type f'
+alias ps1-rvm='PS1="\$(~/.rvm/bin/rvm-prompt) $PS1"'
+alias rndpass='dd if=/dev/urandom count=1 2>/dev/null | base64 | head -1 | cut -c4-15'
+
+function remove-from-path() {
+    if [ x"$1" == x"" ]; then
+        echo "Missing parameter."
+        echo "Usage: remove-from-path <PATH_TO_REMOVE>"
+        exit 1
+    else
+        export PATH=$(echo $PATH | sed -E -e "s;:$1;;" -e "s;$1:?;;")
+    fi
+}
+
+######################
+#### COMMON TYPOS ####
+######################
+alias cd..='cd ..'
+
+######################
+#### APPS         ####
+######################
+# TaskWarrior
+alias t='task'
+alias tc='task completed'
+
+# Android helpers
+alias android-activities='adb shell dumpsys activity activities'
+alias emu='emulator -avd Droid22 -dns-server 192.168.3.234 &'
+
+# Android screen capture
+alias asc='java -jar ~/Applications/AndroidScreenCapture/AShot-1.1.jar 2>/dev/null &'
+function asc-patch()
+{
+    pushd ${ANDROID_SDK}/tools
+    ln -s ../platform-tools/adb
+    popd
+}
+
+# Ant
+alias targets='awk "/target /" build.xml'
+
+# Git
+alias gs='git status -s'
+alias gl='git log --author `git config user.email`'
+alias standup='git log --since yesterday --author `git config user.email` --oneline'
+alias gme='git log --author `git config user.email` --oneline --graph --decorate'
+alias gsau='git ls-files -v | egrep ^[[:lower:]]'
+alias gau='git update-index --assume-unchanged'
+alias gnau='git update-index --no-assume-unchanged'
+
+# Tomcat
+alias tomstart='sudo /Library/Tomcat/Home/bin/startup.sh'
+alias tomstop='sudo /Library/Tomcat/Home/bin/shutdown.sh'
+alias tomrestart='tomstop && tomstart'
+#alias tomrestart='sudo /etc/init.d/tomcat6 restart'
+alias tomdload='cd /Library/LaunchDaemons && sudo launchctl load -w org.apache.catalina.plist'
+alias tomdunload='cd /Library/LaunchDaemons && sudo launchctl unload -w org.apache.catalina.plist'
+alias tomd='cd /Library/LaunchDaemons && sudo launchctl $1 -w org.apache.catalina.plist'
+
+# MySQL
+alias mystart='sudo /Library/StartupItems/MySQLCOM/MySQLCOM start'
+alias mystop='sudo /Library/StartupItems/MySQLCOM/MySQLCOM stop'
+alias myrestart='sudo /Library/StartupItems/MySQLCOM/MySQLCOM restart'
+alias mysql='/usr/local/mysql/bin/mysql'
+alias mysqladmin='/usr/local/mysql/bin/mysqladmin'
+
+# Apache
+alias apachetest='sudo apachectl configtest'
+alias apachestop='sudo apachectl -k stop'
+alias apachestart='sudo apachectl -k start'
+alias apacherestart='sudo apachectl -k restart'
+
+# Nginx
+alias nginx='sudo /opt/nginx/sbin/nginx'
+alias nginxstop='sudo /opt/nginx/sbin/nginx -s stop'
+
+# OS X
+alias find-identity='security find-identity -v -p codesigning'
+alias simu='/Developer/Platforms/iPhoneSimulator.platform/Developer/Applications/iPhone\ Simulator.app/Contents/MacOS/iPhone\ Simulator &'
+alias xcode-toolpath='export PATH=$PATH:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin'
+alias show-hidden='defaults write com.apple.finder AppleShowAllFiles YES'
+alias hide-hidden='defaults write com.apple.finder AppleShowAllFiles NO'
+
+# Open file with QuickLook
+function ql()
+{
+    qlmanage -p "$@" >& /dev/null &
+}
+
+# App launchers
+alias chrome='open -a /Applications/Google\ Chrome.app $1'
+alias komodo='open -a /Applications/Komodo\ Edit\ 8.app/Contents/MacOS/komodo-bin $1'

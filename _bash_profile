@@ -1,0 +1,134 @@
+#######################
+##### EXECUTABLES #####
+#######################
+HOME_BIN=$HOME/bin
+if [ -d "${HOME_BIN}" ] ; then
+	export PATH=$PATH:$HOME/bin
+fi
+
+export PATH="/usr/local/bin:$PATH"
+
+GROOVY_HOME=/usr/local/opt/groovy/libexec
+if [ -d "${GROOVY_HOME}" ] ; then
+    export GROOVY_HOME=${GROOVY_HOME}
+fi
+
+#export PYTHON_EXECUTABLE=/usr/bin/python
+
+##############################
+##### TOMCAT ENVIRONMENT #####
+##############################
+JAVA_HOME=/Library/Java/Home
+#JAVA_HOME=`/usr/libexec/java_home`
+if [ -d "${JAVA_HOME}" ] ; then
+	export JAVA_HOME=${JAVA_HOME}
+fi
+
+CATALINA_HOME=/Library/Tomcat/Home
+if [ -d "${CATALINA_HOME}" ] ; then
+    export CATALINA_HOME="${CATALINA_HOME}"
+    export CATALINA_BASE="${CATALINA_HOME}"
+fi
+
+export TOMCAT_OPTS="-Dlog4j.configuration=/Library/Tomcat/Home/conf/log4j.properties"
+
+###############################
+##### ANDROID ENVIRONMENT #####
+###############################
+# set PATH so it includes android platform-tools if it exists
+if [ -d "$HOME/android-sdk-macosx/platform-tools" ] ; then
+	export PATH="$HOME/android-sdk-macosx/platform-tools:$PATH"
+fi
+
+ANDROID_SDK=$HOME/android-sdk-macosx
+if [ -d "$ANDROID_SDK" ] ; then
+        export ANDROID_SDK=$ANDROID_SDK
+        export ANDROID_HOME=$ANDROID_SDK
+
+    # Update for latest Android SDK
+    ANDROID_BUILD_TOOLS="${ANDROID_SDK}/build-tools/23.0.1"
+    if [ -d "${ANDROID_BUILD_TOOLS}" ] ; then
+        export PATH=$PATH:${ANDROID_BUILD_TOOLS}
+    fi
+
+    ANDROID_TOOLS="${ANDROID_SDK}/tools"
+    if [ -d "${ANDROID_TOOLS}" ] ; then
+        export PATH=$PATH:${ANDROID_TOOLS}
+    fi
+fi
+
+ANDROID_NDK=$HOME/android-ndk
+if [ -d "${ANDROID_NDK}" ] ; then
+	export ANDROID_NDK=${ANDROID_NDK}
+	export PATH=$PATH:${ANDROID_NDK}
+fi
+
+###############################
+##### SHELL FUNCTIONALITY #####
+###############################
+export HISTCONTROL=erasedups
+export HISTIGNORE="pwd:ls:ll:"
+
+export SVN_EDITOR=/usr/bin/vim
+
+#########################
+##### SHELL VISUALS #####
+#########################
+export GREP_OPTIONS='--color=auto'
+
+# If not running interactively, don't do the following
+[ -z "$PS1" ] && return
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\n(\[\033[0;36m\]\u\[\033[0m\]@\[\033[0;36m\]\h) \[\033[00m\]:\[\033[01;34m\]\w\n\[\033[00m\]\$ '
+    export CLICOLOR=1
+    export LSCOLORS=Exfxcxdxbxegedabagacad
+else
+    PS1='${debian_chroot:+($debian_chroot)}\n(\u@\h) :\w\n\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
