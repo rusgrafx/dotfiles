@@ -8,6 +8,7 @@ alias ip='ifconfig | grep ": active" -B 7 | grep "inet "'
 alias findexe='find . -perm +0111 -type f'
 alias ps1-rvm='PS1="\$(~/.rvm/bin/rvm-prompt) $PS1"'
 alias rndpass='dd if=/dev/urandom count=1 2>/dev/null | base64 | head -1 | cut -c4-15'
+alias ports='sudo lsof -i -P | grep -i "listen"'
 
 function remove-from-path() {
     if [ x"$1" == x"" ]; then
